@@ -1,5 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Hey there!</h1>
+    {{ dump() }}
+    <table style="align:center;" border="0" cellpadding="1" cellspacing="1">
+        <tbody>
+        <tr>
+            <td><input type="button" /><a href={{ path('btnTap') }}>{{ current }}</a></td>
+            <td><input type="button" /></td>
+            <td><input type="button" /></td>
+        </tr>
+        <tr>
+            <td><input type="button" /></td>
+            <td><input type="button" /></td>
+            <td><input type="button" /></td>
+        </tr>
+        <tr>
+            <td><input type="button" /></td>
+            <td><input type="button" /></td>
+            <td><input type="button" /></td>
+        </tr>
+        </tbody>
+    </table>
+
 {% endblock %}
