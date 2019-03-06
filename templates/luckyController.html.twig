@@ -5,21 +5,91 @@
     <table style="align:center;" border="0" cellpadding="1" cellspacing="1">
         <tbody>
         <tr>
-            <td><input type="button" /><a href={{ path('btnTap') }}>{{ current }}</a></td>
-            <td><input type="button" /></td>
-            <td><input type="button" /></td>
+            <td><input type="button" class="game-cell" id="00" /></td>
+            <td><input type="button" class="game-cell" id="01"/></td>
+            <td><input type="button" class="game-cell" id="02"/></td>
         </tr>
         <tr>
-            <td><input type="button" /></td>
-            <td><input type="button" /></td>
-            <td><input type="button" /></td>
+            <td><input type="button" class="game-cell" id="10"/></td>
+            <td><input type="button" class="game-cell" id="11"/></td>
+            <td><input type="button" class="game-cell" id="12"/></td>
         </tr>
         <tr>
-            <td><input type="button" /></td>
-            <td><input type="button" /></td>
-            <td><input type="button" /></td>
+            <td><input type="button" class="game-cell" id="20"/></td>
+            <td><input type="button" class="game-cell" id="21"/></td>
+            <td><input type="button" class="game-cell" id="22"/></td>
         </tr>
         </tbody>
     </table>
+
+    <script>
+
+        $(document).ready(function () {
+            $(".game-cell").click(function(){
+                var title=$(this).attr("id");
+                Game.sendMessage(title);
+            });
+        })// This object will be sent everytime you submit a message in the sendMessage function.
+        var clientInformation = {
+            username: new Date().getTime().toString()
+            // You can add more information in a static object
+        };
+
+        // START SOCKET CONFIG
+        /**
+         * Note that you need to change the "sandbox" for the URL of your project.
+         * According to the configuration in Sockets/Chat.php , change the port if you need to.
+         * @type WebSocket
+         */
+        var conn = new WebSocket('ws://192.168.0.104:8080');
+
+        conn.onopen = function(e) {
+            console.info("Connection established succesfully");
+        };
+
+        conn.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            Game.appendMessage(data.username, data.message);
+
+            console.log(data);
+        };
+
+        conn.onerror = function(e){
+            alert("Error: something went wrong with the socket.");
+            console.error(e);
+        };
+        // END SOCKET CONFIG
+
+
+        /// Some code to add the messages to the list element and the message submit.
+
+        // $("#0 0").click(function(){
+        //     if ($(this).text === "") {
+        //         Game.sendMessage(this.id);
+        //     }
+        // });
+
+        // Mini API to send a message with the socket and append a message in a UL element.
+        var Game = {
+            appendMessage: function(username,message){
+                var from;
+                var str = `#${ message }`;
+               $(str).val(message);
+
+                // Append List Item
+                // var ul = document.getElementById("chat-list");
+                // var li = document.createElement("li");
+                // li.appendChild(document.createTextNode(from + " : "+ message));
+                // ul.appendChild(li);
+            },
+            sendMessage: function(text){
+                clientInformation.message = text;
+                // Send info as JSON
+                conn.send(JSON.stringify(clientInformation));
+                // Add my own message to the list
+            }
+        };
+        </script>
+
 
 {% endblock %}

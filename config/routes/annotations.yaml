@@ -1,7 +1,3 @@
-index:
-  path: /
-  controller: App\Controller\LuckyController:number
-
-btnTap:
-  path: /test
-  controller: App\Controller\LuckyController:btnTap
+app:
+  resource: ../../src/Controller
+  type: annotation
